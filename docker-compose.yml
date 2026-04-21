@@ -1,9 +1,13 @@
 services:
   api:
-    container_name: nectar_menu_api
+    container_name: base-api
     build:
       context: .
       dockerfile: docker/api/Dockerfile
+      args:
+        UID: "${UID:-1000}"
+        GID: "${GID:-1000}"
+        USERNAME: dev
     volumes:
       - ./api:/var/www
     working_dir: /var/www
@@ -14,7 +18,7 @@ services:
       - redis
 
   spa:
-    container_name: nectar_menu_spa
+    container_name: base-spa
     build:
       context: .
       dockerfile: docker/spa/Dockerfile
@@ -29,12 +33,12 @@ services:
 
   db:
     image: mysql:8.4
-    container_name: nectar_menu_db
+    container_name: base-db
     restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_USER: nectar_menu
-      MYSQL_PASSWORD: nectar_menu_password
+      MYSQL_USER: base
+      MYSQL_PASSWORD: base_password
     volumes:
       - db_data:/var/lib/mysql
     ports:
@@ -42,7 +46,7 @@ services:
 
   redis:
     image: redis
-    container_name: nectar_menu_redis
+    container_name: base-redis
     restart: on-failure
     ports:
       - 6379:6379

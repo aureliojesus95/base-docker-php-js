@@ -4,5 +4,6 @@ WORKDIR /app
 
 RUN corepack enable
 
+USER node
+
 CMD ["tail", "-f", "/dev/null"]
-# CMD ["yarn", "dev"]
